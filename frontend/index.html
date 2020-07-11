@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Input</title>
+</head>
+<body>
+  <h1>Update Player Information</h1>
+  <p1>Do the maths and then enter values here to update them! Only enter what you want to change</p1>
+
+    <form class="form" id="testform">
+        <label for="name">Player Name</label><br>
+        <input type="text" name="name" id="name"> <br>
+
+        <label for="points">Game Points</label><br>
+        <input type="text" name="points" id="points"> <br>
+
+        <label for="sets">Sets Played</label><br>
+        <input type="text" name="sets" id="sets"> <br>
+
+        <label for="wins">Game Wins</label><br>
+        <input type="text" name="wins" id="wins"> <br>
+
+        <label for="losses">Game Losses</label><br>
+        <input type="text" name="losses" id="losses"> <br>
+
+        <label for="total">Total Points</label><br>
+        <input type="text" name="total" id="total"> <br>
+
+        <label for="strikes">STRIKES</label><br>
+        <input type="text" name="strikes" id="strikes"> <br>
+
+        <label for="password">Authorize Access</label><br>
+        <input type="password" name="password" id="password" style="width: 1230px;">
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <script>
+        const testform = document.getElementById("testform");
+        console.log("Got form");
+
+
+        testform.addEventListener('submit', async function(e){
+          e.preventDefault();
+          console.log("Sent Request");
+
+
+          const data = {name: document.getElementById('name').value,
+                          points: document.getElementById('points').value,
+                          sets: document.getElementById('sets').value,
+                          wins: document.getElementById('wins').value,
+                          losses: document.getElementById('losses').value,
+                          total: document.getElementById('total').value,
+                          strikes: document.getElementById('strikes').value,
+                          auth: document.getElementById('password').value};
+
+          const options = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          };
+
+          const response = await fetch('/player', options);
+          const resdata = await response.json();
+          console.log(resdata);
+          if (resdata == "Unauthorized"){document.getElementById('password').value = ""}
+          else if (resdata != "Unauthorized") {
+            document.getElementById('name').value = ""
+            document.getElementById('points').value = ""
+            document.getElementById('sets').value = ""
+            document.getElementById('wins').value = ""
+            document.getElementById('losses').value = ""
+            document.getElementById('total').value = ""
+            document.getElementById('strikes').value = ""
+          }
+        });
+      </script>
+
+      <p1>Get player data</p1>
+
+          <form class="form" id="form2">
+
+            <label for="lookupname">Player Name</label><br>
+            <input type="text" name="lookupname" id="lookupname"> <br>
+            <button type="submit">Submit</button>
+
+          </form>
+
+
+          <script>
+
+            const getform = document.getElementById("form2");
+            console.log("Got form");
+
+
+            getform.addEventListener('submit', async function(e){
+              e.preventDefault();
+              console.log("Sent Request");
+
+              const data = {name: document.getElementById("lookupname").value};
+
+              const options = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              };
+
+              const response = await fetch('/readPlayer', options);
+              const resdata = await response.json();
+              console.log(resdata);
+              });
+              </script>
+      </body>
+
+</html>
